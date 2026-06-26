@@ -52,7 +52,7 @@ if((KernelPlatformQEMUArmVirt AND NOT (KernelArmExportPCNTUser AND KernelArmExpo
    OR KernelPlatformRocketchip
    OR KernelPlatformRocketchipZCU102
    OR KernelPlatformCheshire
-   OR (SIMULATION AND (KernelArchRiscV OR KernelArchARM))
+   OR (SIMULATION AND (KernelArchLoongArch OR KernelArchRiscV OR KernelArchARM))
 )
     set(LibPlatSupportHaveTimer OFF)
 else()
@@ -111,6 +111,9 @@ elseif(KernelArchX86)
 elseif(KernelArchRiscV)
     list(APPEND deps src/arch/riscv/irqchip/plic.c)
     list(APPEND irqchip_modules "-Wl,--undefined=riscv_plic_ptr")
+elseif(KernelArchLoongArch)
+    # The LoongArch64 QEMU virt sel4test path only needs the generic
+    # chardev/serial support; IRQ controller access is handled by the kernel.
 else()
     message(FATAL_ERROR "Unsupported KernelArch '${KernelArch}'")
 endif()
